@@ -1,0 +1,41 @@
+<html>
+
+<h1>
+	<div>{{ .FielName }}</div>
+</h1>
+
+<div>
+	<H2>Loop</H2>
+	<div>
+		{{ range .Users }}
+		{{ . }}
+		{{ end }}
+	</div>
+</div>
+
+<div>
+	<H3>Range</H3>
+	<div>
+		{{ range .userdata }}
+		Name: {{ .Name }},
+		Phone: {{ .Phone }},
+		Age: {{ .Age }}
+		{{ end }}
+	</div>
+</div>
+
+<div>
+	<H3>
+		Range Key Value
+	</H3>
+	<div>
+		{{ range $key, $value := .userdata }}
+		{{ $key }}
+		Name: {{ $value.Name }},
+		Phone: {{ $value.Phone }},
+		Age: {{ $value.Age }}
+		{{ end }}
+	</div>
+</div>
+
+</html>
