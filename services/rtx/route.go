@@ -36,7 +36,7 @@ func (r *ROUTEX) Connect(rx func(*gin.Engine, *gin.RouterGroup)) {
 	router.Use(gin.Recovery())
 
 	s := &http.Server{
-		Addr:           fmt.Sprintf(":%d", r.PORT),
+		Addr:           fmt.Sprintf("127.0.0.1:%d", r.PORT),
 		Handler:        router,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,

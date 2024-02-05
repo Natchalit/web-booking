@@ -6,6 +6,15 @@
       <div class="logo">
         <a href="#">Booking</a>
       </div>
+      <div class="menu-sidebar">
+        <ul class="menu-side-list">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Portfolio</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
       <ul class="menu">
         <li><a href="#">Home</a></li>
         <li><a href="#">About Us</a></li>
@@ -13,7 +22,18 @@
         <li><a href="#">Portfolio</a></li>
         <li><a href="#">Contact Us</a></li>
       </ul>
+      <ul class="menu-side-icon">
+        <li onclick="showSideBar()"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></a></li>
+      </ul>
     </div>
   </div>
 </nav>
+
+<script>
+  function showSideBar() {
+    const sidebar = document.querySelector(`.menu-sidebar`);
+    sidebar.style.display = 'flex';
+  }
+</script>
+
 {{end}}
