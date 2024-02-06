@@ -3,6 +3,7 @@ package rtx
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"path/filepath"
 	"time"
 	"web-booking/services/logx"
@@ -35,8 +36,15 @@ func (r *ROUTEX) Connect(rx func(*gin.Engine, *gin.RouterGroup)) {
 	// router.Use(UseHeader)
 	router.Use(gin.Recovery())
 
+	addr := ``
+	if os.Getenv(`APP_ENV`) == `develop` {
+		addr = fmt.Sprintf("127.0.0.1:%d", r.PORT)
+	} else {
+		addr = fmt.Sprintf(":%d", r.PORT)
+	}
+
 	s := &http.Server{
-		Addr:           fmt.Sprintf("127.0.0.1:%d", r.PORT),
+		Addr:           addr,
 		Handler:        router,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
