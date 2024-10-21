@@ -41,7 +41,7 @@ func (r *ROUTEX) Connect(rx func(*gin.Engine, *gin.RouterGroup)) {
 	if appEnv == `develop` {
 		addr = fmt.Sprintf("127.0.0.1:%d", r.PORT)
 	} else {
-		addr = fmt.Sprintf("0.0.0.0:%d", 80)
+		addr = fmt.Sprintf("0.0.0.0:%d", 8080)
 	}
 
 	s := &http.Server{
