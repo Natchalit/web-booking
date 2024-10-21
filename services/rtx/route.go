@@ -37,10 +37,11 @@ func (r *ROUTEX) Connect(rx func(*gin.Engine, *gin.RouterGroup)) {
 	router.Use(gin.Recovery())
 
 	addr := ``
-	if os.Getenv(`APP_ENV`) == `develop` {
+	appEnv := os.Getenv(`APP_ENV`)
+	if appEnv == `develop` {
 		addr = fmt.Sprintf("127.0.0.1:%d", r.PORT)
 	} else {
-		addr = fmt.Sprintf(":%d", r.PORT)
+		addr = fmt.Sprintf("0.0.0.0:%d", r.PORT)
 	}
 
 	s := &http.Server{
