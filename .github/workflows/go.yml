@@ -50,13 +50,13 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
 
         # ตั้งค่า SSH เพื่อเข้าถึง Server ของคุณ
-        ssh -o StrictHostKeyChecking=no username@your.server.ip << 'EOF'
+        ssh -o StrictHostKeyChecking=no root@117.18.124.154 << 'EOF'
           # นำไฟล์ build ขึ้นไปยัง server
-          scp web-booking username@your.server.ip:/home/username/web-booking
+          scp web-booking root@117.18.124.154:/home/root/web-booking
 
           # หยุดแอปที่กำลังทำงาน (ถ้ามี)
           pkill -f web-booking || true
 
           # เริ่มต้นแอปใหม่
-          nohup /home/username/web-booking > /home/username/app.log 2>&1 &
+          nohup /home/root/web-booking > /home/root/app.log 2>&1 &
         EOF
