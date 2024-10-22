@@ -21,12 +21,12 @@ func (r *ROUTEX) Connect(rx func(*gin.Engine, *gin.RouterGroup)) {
 
 	// Serve static files from the specified directory
 	logx.Infof(`Serve static files from the specified directory`)
-	router.Static("/css", "src/templates/assets/css")
-	router.Static("/js", "src/templates/assets/js")
+	router.Static("/css", "./src/templates/assets/css")
+	router.Static("/js", "./src/templates/assets/js")
 
 	// Load HTML templates
 	logx.Infof(`Load HTML templates`)
-	path := filepath.Join("src/templates", "**", "*.html")
+	path := filepath.Join("./src/templates", "**", "*.html")
 	logx.Infof(path)
 	router.LoadHTMLGlob(path)
 	logx.Infof(`Load HTML SUCCESS`)
