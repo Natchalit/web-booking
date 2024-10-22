@@ -31,8 +31,8 @@ jobs:
     - name: Display-Build-Golang-App
       run: ls -R build/
 
-    - name: Create-Env-File
-      run: 'echo "APIKey=${{ secrets.APIKey }}" > build/.env'
+    #- name: Create-Env-File
+    #  run: 'echo "APIKey=${{ secrets.APIKey }}" > build/.env'
 
     - name: Copy-Build-Golang-App
       uses: appleboy/scp-action@master
