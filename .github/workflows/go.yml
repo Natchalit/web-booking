@@ -22,41 +22,24 @@ jobs:
       with:
         go-version: '^1.21'  # ใช้เวอร์ชัน Go ล่าสุดที่รองรับ
 
+    - name: Install-Golang-Dependencies
+      run: go mod download
+
     - name: Build Golang Application
-      run: go build -o web-booking
+      run: go build -o build/web-booking -v
 
-    - name: Upload Build Artifact
-      uses: actions/upload-artifact@v3  # ใช้เวอร์ชันล่าสุดเสมอ
+    - name: Display-Build-Golang-App
+      run: ls -R build/
+
+    - name: Create-Env-File
+      run: 'echo "APIKey=${{ secrets.APIKey }}" > build/.env'
+
+    - name: Copy-Build-Golang-App
+      uses: appleboy/scp-action@master
       with:
-        name: web-booking
-        path: web-booking
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-    - name: Download Build Artifact
-      uses: actions/download-artifact@v3  # ใช้เวอร์ชันล่าสุดเสมอ
-      with:
-        name: web-booking
-
-    - name: Deploy to Ubuntu Server
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      run: |
-        mkdir -p ~/.ssh
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-
-        # ตั้งค่า SSH เพื่อเข้าถึง Server ของคุณ
-        ssh -o StrictHostKeyChecking=no root@117.18.124.154 << 'EOF'
-          # นำไฟล์ build ขึ้นไปยัง server
-          scp web-booking root@117.18.124.154:/home/root/web-booking
-
-          # หยุดแอปที่กำลังทำงาน (ถ้ามี)
-          pkill -f web-booking || true
-
-          # เริ่มต้นแอปใหม่
-          nohup /home/root/web-booking > /home/root/app.log 2>&1 &
-        EOF
+        host: '${{ secrets.SERVER_IP }}'
+        username: '${{ secrets.SSH_USERNAME }}'
+        key: '${{ secrets.SSH_PRIVATE_KEY }}'
+        port: '${{ secrets.SERVER_PORT }}'
+        source: build/
+        target: /root/web-booking
