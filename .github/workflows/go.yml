@@ -10,36 +10,53 @@ on:
     branches: [ "master" ]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v4  # ใช้เวอร์ชันล่าสุดเสมอ
 
-      - name: Setup Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: 1.21
+    - name: Set up Go
+      uses: actions/setup-go@v4  # ใช้เวอร์ชันล่าสุดเสมอ
+      with:
+        go-version: '^1.21'  # ใช้เวอร์ชัน Go ล่าสุดที่รองรับ
 
-      - name: Install dependencies
-        run: go mod tidy
+    - name: Build Golang Application
+      run: go build -o web-booking
 
-      - name: Run tests
-        run: go test ./...
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v3  # ใช้เวอร์ชันล่าสุดเสมอ
+      with:
+        name: web-booking
+        path: web-booking
 
-      - name: Build the application
-        run: go build -o myapp
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
 
-      - name: Deploy to server
-        if: github.ref == 'refs/heads/main'
-        env:
-          SERVER_IP: ${{ secrets.SERVER_IP }}
-          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          echo "${SSH_PRIVATE_KEY}" > private_key.pem
-          chmod 600 private_key.pem
-          scp -i private_key.pem myapp $SSH_USERNAME@$SERVER_IP:/path/to/deploy
-          ssh -i private_key.pem $SSH_USERNAME@$SERVER_IP "sudo systemctl restart myapp"
-          rm private_key.pem
+    steps:
+    - name: Download Build Artifact
+      uses: actions/download-artifact@v3  # ใช้เวอร์ชันล่าสุดเสมอ
+      with:
+        name: web-booking
+
+    - name: Deploy to Ubuntu Server
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+
+        # ตั้งค่า SSH เพื่อเข้าถึง Server ของคุณ
+        ssh -o StrictHostKeyChecking=no username@your.server.ip << 'EOF'
+          # นำไฟล์ build ขึ้นไปยัง server
+          scp web-booking username@your.server.ip:/home/username/web-booking
+
+          # หยุดแอปที่กำลังทำงาน (ถ้ามี)
+          pkill -f web-booking || true
+
+          # เริ่มต้นแอปใหม่
+          nohup /home/username/web-booking > /home/username/app.log 2>&1 &
+        EOF
