@@ -12,8 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: production
-    concurrency: production
+    environment: master
+    concurrency: master
 
     steps:
     - name: Checkout Repository
