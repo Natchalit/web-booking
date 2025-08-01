@@ -27,7 +27,7 @@ func (r *ROUTEX) Connect(rx func(*gin.Engine, *gin.RouterGroup)) {
 	// Load HTML templates
 	logx.Infof(`Load HTML templates`)
 	path := filepath.Join("./src/templates", "**", "*.html")
-	logx.Infof(path)
+	logx.Infof(`%s`, path)
 	router.LoadHTMLGlob(path)
 	logx.Infof(`Load HTML SUCCESS`)
 
